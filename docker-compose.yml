@@ -1,0 +1,29 @@
+services:
+  status-page:
+    build: .
+    container_name: status-page
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - TZ=Australia/Melbourne
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./data:/app/data
+      - ./config:/app/config
+    restart: unless-stopped
+    networks:
+      - status-net
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.status.rule=Host(`status.examplename.net`)"
+      - "traefik.http.routers.status.tls=true"
+      - "traefik.http.routers.status.tls.certresolver=letsencrypt"
+
+networks:
+  status-net:
+    driver: bridge
+
+volumes:
+  status-data:
+    driver: local

@@ -1,0 +1,34 @@
+{
+  "services": [
+    {
+      "name": "n8n",
+      "url": "https://n8n.examplename.net",
+      "container": "n8n",
+      "description": "Workflow Automation Platform"
+    },
+    {
+      "name": "Planka",
+      "url": "https://planka.examplename.net",
+      "container": "planka",
+      "description": "Project Management Board"
+    },
+    {
+      "name": "Ghostfolio",
+      "url": "https://ghostfolio.examplename.net",
+      "container": "ghostfolio",
+      "description": "Portfolio Management Dashboard"
+    },
+    {
+      "name": "Uptime Kuma",
+      "url": "https://uptime.examplename.net",
+      "container": "uptime-kuma",
+      "description": "Service Monitoring Tool"
+    },
+    {
+      "name": "Portainer",
+      "url": "https://portainer.examplename.net",
+      "container": "portainer",
+      "description": "Docker Management UI"
+    }
+  ]
+}
