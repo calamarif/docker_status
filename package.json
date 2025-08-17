@@ -8,12 +8,13 @@
     "dev": "nodemon server.js"
   },
   "dependencies": {
-    "express": "^4.18.2",
+    "cors": "^2.8.5",
     "dockerode": "^4.0.2",
-    "node-cron": "^3.0.3",
+    "dotenv": "^17.2.1",
+    "express": "^4.18.2",
     "fs-extra": "^11.2.0",
     "moment": "^2.29.4",
-    "cors": "^2.8.5"
+    "node-cron": "^3.0.3"
   },
   "keywords": [
     "docker",

@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const Docker = require('dockerode');
 const cron = require('node-cron');
@@ -125,6 +126,14 @@ async function checkUrlStatus(url) {
 async function updateServiceStatus() {
   try {
     const config = fs.readJsonSync(CONFIG_FILE);
+
+    // Replace URL placeholders with environment variables
+    config.services.forEach(service => {
+      if (process.env[service.url]) {
+        service.url = process.env[service.url];
+      }
+    });
+
     const currentStatus = { lastUpdate: new Date().toISOString(), services: [] };
     
     for (const service of config.services) {

@@ -2,8 +2,9 @@ services:
   status-page:
     build: .
     container_name: status-page
+    env_file: .env
     ports:
-      - "3000:3000"
+      - "3030:3030"
     environment:
       - NODE_ENV=production
       - TZ=Australia/Melbourne
@@ -16,7 +17,7 @@ services:
       - status-net
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.status.rule=Host(`status.examplename.net`)"
+      - "traefik.http.routers.status.rule=Host(`${STATUS_PAGE_HOST}`)"
       - "traefik.http.routers.status.tls=true"
       - "traefik.http.routers.status.tls.certresolver=letsencrypt"
 
