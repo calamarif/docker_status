@@ -29,19 +29,19 @@ const defaultServices = {
   "services": [
     {
       "name": "n8n",
-      "url": "https://n8n.examplename.net",
+      "url": "https://n8n.callumfinlayson.net",
       "container": "n8n",
       "description": "Workflow Automation"
     },
     {
       "name": "Planka",
-      "url": "https://planka.examplename.net",
+      "url": "https://planka.callumfinlayson.net",
       "container": "planka",
       "description": "Project Management"
     },
     {
       "name": "Ghostfolio",
-      "url": "https://ghostfolio.examplename.net",
+      "url": "https://ghostfolio.callumfinlayson.net",
       "container": "ghostfolio",
       "description": "Portfolio Management"
     }
@@ -161,16 +161,27 @@ async function updateServiceStatus() {
 function updateStatusHistory(services) {
   try {
     const history = fs.readJsonSync(HISTORY_FILE);
-    
+    const config = fs.readJsonSync(CONFIG_FILE);
+    const configuredServiceNames = config.services.map(s => s.name);
+
+    // Resolve incidents for services that are no longer configured
+    history.incidents.forEach(incident => {
+      if (!incident.resolved && !configuredServiceNames.includes(incident.service)) {
+        incident.resolved = new Date().toISOString();
+        incident.description = `Service removed from configuration.`;
+        incident.impact = 'none';
+      }
+    });
+
     services.forEach(service => {
       if (service.status === 'down') {
         // Check if this is a new incident
-        const recentIncident = history.incidents.find(incident => 
-          incident.service === service.name && 
+        const recentIncident = history.incidents.find(incident =>
+          incident.service === service.name &&
           !incident.resolved &&
           (Date.now() - new Date(incident.started).getTime()) < 3600000 // Within last hour
         );
-        
+
         if (!recentIncident) {
           history.incidents.push({
             id: Date.now().toString(),
@@ -192,10 +203,10 @@ function updateStatusHistory(services) {
         });
       }
     });
-    
+
     // Keep only last 100 incidents
     history.incidents = history.incidents.slice(-100);
-    
+
     fs.writeJsonSync(HISTORY_FILE, history);
   } catch (error) {
     console.error('Error updating history:', error);
@@ -241,7 +252,7 @@ cron.schedule('*/2 * * * *', updateServiceStatus);
 // Initial status check
 updateServiceStatus();
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3030;
 app.listen(PORT, () => {
   console.log(`Status page server running on port ${PORT}`);
   console.log(`Visit: http://localhost:${PORT}`);
