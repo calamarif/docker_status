@@ -20,6 +20,12 @@ services:
       - "traefik.http.routers.status.rule=Host(`${STATUS_PAGE_HOST}`)"
       - "traefik.http.routers.status.tls=true"
       - "traefik.http.routers.status.tls.certresolver=letsencrypt"
+    
+  cloudflared_status:
+    container_name: cloudflared_status
+    restart: unless-stopped
+    image: cloudflare/cloudflared:latest
+    command: tunnel --no-autoupdate run --token ${CLOUDFLARED_STATUS_TOKEN}
 
 networks:
   status-net:
